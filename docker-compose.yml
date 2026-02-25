@@ -1,0 +1,38 @@
+services:
+  antifraud-email-api:
+    build: .
+    container_name: antifraud-email-api
+    restart: unless-stopped
+    ports:
+      - "${PORT:-8000}:8000"
+    environment:
+      - MODEL_PATH=${MODEL_PATH:-meta-llama/Llama-3.1-8B}
+      - MAX_MODEL_LEN=${MAX_MODEL_LEN:-4096}
+      - GPU_MEMORY_UTILIZATION=${GPU_MEMORY_UTILIZATION:-0.90}
+      - TENSOR_PARALLEL_SIZE=${TENSOR_PARALLEL_SIZE:-1}
+      - QUANTIZATION=${QUANTIZATION:-}
+      - DTYPE=${DTYPE:-bfloat16}
+
+      - HF_TOKEN=${HF_TOKEN}
+    volumes:
+      # Optional: mount a local model directory to avoid re-downloading
+      # Uncomment and set MODEL_PATH=/models in your .env
+      # - ${MODEL_DIR:-./models}:/models:ro
+      - huggingface_cache:/root/.cache/huggingface
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 120s   # model loading can take 1-3 minutes
+
+volumes:
+  # Named volume so HuggingFace model weights persist across container restarts
+  huggingface_cache:

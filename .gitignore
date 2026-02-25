@@ -1,0 +1,40 @@
+# Model weights (prevent accidental upload)
+*.bin
+*.safetensors
+*.pt
+*.pth
+*.gguf
+*.ggml
+models/
+model_cache/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+.eggs/
+*.egg
+
+# Virtual environment
+venv/
+venv_linux/
+.venv/
+env/
+
+# Environment variables
+.env
+
+# IDE
+.vscode/
+.idea/
+.claude/
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Logs
+*.log
+logs/
