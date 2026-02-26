@@ -8,7 +8,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY main.py .
 
 # 模型路径通过 docker run -v 挂载，不 COPY 进镜像
-ENV MODEL_PATH=meta-llama/Llama-3.1-8B
+ENV MODEL_PATH=meta-llama/Llama-3.1-8B-Instruct
 ENV QUANTIZATION=
 ENV MAX_MODEL_LEN=4096
 ENV GPU_MEMORY_UTILIZATION=0.90
